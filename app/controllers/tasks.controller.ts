@@ -5,16 +5,24 @@ import { ValidatedRequest } from "express-joi-validation";
 import { ITaskBodySchema } from "../schemas/tasks.schema";
 import APIResponse from '../utils/response';
 
+interface Json {
+  code: boolean;
+  data: any[];
+}
+
+type Send<T = Response> = (body?: Json) => T;
+
+interface CustomResponse extends Response {
+  json: Send<this>;
+}
+
 @Service()
 export default class TasksController {
   constructor(private service: TaskService, private apiResponse: APIResponse) {}
   async find(_: Request, res: Response, next: NextFunction) {
-    try {
-      const data = await this.service.find();
-      return res.json(this.apiResponse.success(data));
-    } catch (error) {
-      next(error);
-    }
+    const data = await this.service.find();
+    const current = this.apiResponse.success(data)
+    return res.json(current);
   }
   async store(
     req: ValidatedRequest<ITaskBodySchema>,

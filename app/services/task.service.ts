@@ -1,6 +1,7 @@
 import { Service } from "typedi";
 import TaskRepository from "../repository/task.repository";
 import { ITaskBodySchema, ITaskColletion } from "../schemas/tasks.schema";
+import { db } from '../../config/firebase';
 
 @Service()
 export default class TaskService {
@@ -16,11 +17,11 @@ export default class TaskService {
 
   async store(
     body: ITaskBodySchema["body"]
-  ): Promise<ITaskColletion[] | { message: string }> {
+  ): Promise<ITaskColletion | { message: string, id?: string }> {
     try {
       const { title, description, status } = body;
-      const data = await this.repo.model.add({ title, description, status });
-      return data;
+      const res = await this.repo.model.add({ title, description, status });
+      return { message: 'Task created', id: res.id };
     } catch (error) {
       return { message: "Something went wrong, please try again" };
     }
@@ -36,8 +37,10 @@ export default class TaskService {
     } catch (error: any) {
       if(error?.code === 5){
         return { message: "Document not exist" };
+      } else {
+        return { message: "Something went wrong, please try again" };
       }
-      return { message: "Something went wrong, please try again" };
+
     }
   }
 
@@ -46,9 +49,6 @@ export default class TaskService {
       await this.repo.model.doc(id).delete();
       return "Task deleted";
     } catch (error: any) {
-     if(error?.code === 5){
-        return { message: "Document not exist" };
-      }
       return { message: "Something went wrong, please try again" };
     }
   }
