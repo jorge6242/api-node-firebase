@@ -1,11 +1,11 @@
-### NodeJS + Firebase + FireStore
+# NodeJS + Firebase + FireStore
 
 ## Setup
 - npm install
 - npm run dev
 
 
-#  API Documentation
+##  API Documentation
 
 GET - https://backend-express-firebase-ss1l.onrender.com/api/v1/tasks
 
@@ -32,7 +32,7 @@ PUT - https://backend-express-firebase-ss1l.onrender.com/api/v1/:id
 
 DELETE - https://backend-express-firebase-ss1l.onrender.com/api/v1/:id
 
-# Run Locally
+##  Run Locally
 
 Api: http://localhost:3000/api/v1/tasks
 
@@ -53,12 +53,12 @@ FIREBASE_APP_ID=1:452721128830:web:b9d2b5d5e845e3266e2f2f
 FIREBASE_MEASUREMENT_ID=G-0MHJ435T9N
 ```
 
-#  Unit Testing
+##   Unit Testing
 ```
 npm run coverage
 ```
 
-#  E2E Testing
+##   E2E Testing
 ```
 npm run e2e
 ```
