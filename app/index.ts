@@ -13,4 +13,6 @@ app.listen(config.port, function () {
   console.log(`Api Server listen by port: ${config.port}`);
 });
 
+export default app;
+
 

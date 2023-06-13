@@ -14,17 +14,10 @@ const config: Config.InitialOptions = {
   },
   collectCoverageFrom: ['**/*.*.ts'],
   modulePathIgnorePatterns: ['<rootDir>/jest.config.ts'],
-  testPathIgnorePatterns: [
-    '<rootDir>/__tests__/repository/mocks/',
-    '<rootDir>/__tests__/service/mocks/',
-    '<rootDir>/__tests__/controller/mocks/',
-  ],
   coveragePathIgnorePatterns: [
     '<rootDir>/app/routes/',
     '<rootDir>/app/schemas/',
-    '<rootDir>/__tests__/repository/mocks/',
-    '<rootDir>/__tests__/service/mocks/',
-    '<rootDir>/__tests__/controller/mocks/',
+    '<rootDir>/__e2e__/',
   ],
   coverageThreshold: {
     global: {

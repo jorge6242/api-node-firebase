@@ -7,9 +7,9 @@
 
 #  API Documentation
 
-GET - http://localhost:3000/api/v1/tasks
+GET - https://backend-express-firebase-ss1l.onrender.com/api/v1/tasks
 
-POST - http://localhost:3000/api/v1/tasks
+POST - https://backend-express-firebase-ss1l.onrender.com/api/v1/tasks
   Body
     {
       "title":"title 1",
@@ -17,7 +17,7 @@ POST - http://localhost:3000/api/v1/tasks
       "status":"pending"
     }
 
-PUT - http://localhost:3000/api/v1/tasks/:id
+PUT - https://backend-express-firebase-ss1l.onrender.com/api/v1/:id
   Body
     {
       "title":"title 1",
@@ -25,10 +25,15 @@ PUT - http://localhost:3000/api/v1/tasks/:id
       "status":"pending"
     }
 
-DELETE - http://localhost:3000/api/v1/tasks/:id
+DELETE - https://backend-express-firebase-ss1l.onrender.com/api/v1/:id
 
 #  Unit Testing
 ```
 npm run coverage
+```
+
+#  E2E Testing
+```
+npm run e2e
 ```
 

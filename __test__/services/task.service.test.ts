@@ -2,13 +2,11 @@ import admin from "firebase-admin";
 import TaskRepository from "../../app/repository/task.repository";
 import TaskService from "../../app/services/task.service";
 
-// Create a fake Firestore with a `users` and `posts` collection
-
-// Create a fake Firestore with a `users` and `posts` collection
+const TASK_MOCK = { title: "TEST - Task 1", description: "TEST - Description 1", status: "completed" };
+const TASK_UPDATE_MOCK = { title: "TEST - Task 2", description: "TEST - Description 2", status: "pending" };
 
 const TaskRepositoryMock = <jest.Mock<TaskRepository>>TaskRepository;
 const taskRepositoryMock = new TaskRepositoryMock();
-
 let taskService: TaskService;
 
 describe("Task Service", () => {
@@ -21,10 +19,11 @@ describe("Task Service", () => {
     const store = jest.fn();
     const doc = jest.fn().mockReturnValue({ store });
     jest.spyOn(admin.firestore(), "collection").mockReturnValue({ doc } as unknown as any);
-    const response = [{ title: "Task 1", description: "Description 1", status: "completed" }];
-    jest.spyOn(taskRepositoryMock, "find").mockReturnValueOnce(Promise.resolve([{ title: "Task 1", description: "Description 1", status: "completed" }]));
+    const response = [TASK_MOCK];
+    jest.spyOn(taskRepositoryMock, "find").mockReturnValueOnce(Promise.resolve([TASK_MOCK]));
     const res: any = await taskService.find();
     expect(res).toEqual(response);
+
   });
 
   test("Should be store tasks", async () => {
@@ -33,14 +32,10 @@ describe("Task Service", () => {
     jest.spyOn(admin.firestore(), "collection").mockReturnValue({ doc } as unknown as any);
 
     const TASK_CREATED = "Task created";
-    const task = {
-      title: "Test task",
-      description: "This is a test task",
-      status: "pending",
-    };
 
-    const res: any = await taskService.store(task);
+    const res: any = await taskService.store(TASK_MOCK);
     expect(res.message).toEqual(TASK_CREATED);
+    await taskService.delete(res.id);
   });
 
   test("Should be update tasks", async () => {
@@ -49,20 +44,11 @@ describe("Task Service", () => {
     jest.spyOn(admin.firestore(), "collection").mockReturnValue({ doc } as unknown as any);
 
     const TASK_UPDATED = "Task updated";
-    const createTaskMock: { id?: string; title: string; description: string; status: string } = {
-      title: "Test task",
-      description: "This is a test task",
-      status: "pending",
-    };
-    const updatedTaskMock = {
-      title: "Updated test task",
-      description: "This is an updated test task",
-      status: "completed",
-    };
 
-    const addedTask: any = await taskService.store(createTaskMock);
-    const res: any = await taskService.update(addedTask?.id ? addedTask.id : "", updatedTaskMock);
+    const addedTask: any = await taskService.store(TASK_MOCK);
+    const res: any = await taskService.update(addedTask?.id ? addedTask.id : "", TASK_UPDATE_MOCK);
     expect(res).toEqual(TASK_UPDATED);
+    await taskService.delete(addedTask.id);
   });
 
   test("Should be fail update task", async () => {
@@ -71,12 +57,8 @@ describe("Task Service", () => {
     jest.spyOn(admin.firestore(), "collection").mockReturnValue({ doc } as unknown as any);
 
     const ERROR = { message: "Document not exist" };
-    const updatedTaskMock = {
-      title: "Updated test task",
-      description: "This is an updated test task",
-      status: "completed",
-    };
-    const res: any = await taskService.update("test", updatedTaskMock);
+
+    const res: any = await taskService.update("test", TASK_MOCK);
     expect(res).toEqual(ERROR);
   });
 
@@ -86,13 +68,9 @@ describe("Task Service", () => {
     jest.spyOn(admin.firestore(), "collection").mockReturnValue({ doc } as unknown as any);
 
     const TASK_DELETED = "Task deleted";
-    const createTaskMock: { id?: string; title: string; description: string; status: string } = {
-      title: "Test task",
-      description: "This is a test task",
-      status: "pending",
-    };
-    const addedTask: any = await taskService.store(createTaskMock);
+    const addedTask: any = await taskService.store(TASK_MOCK);
     const res: any = await taskService.delete(addedTask?.id ? addedTask.id : "");
     expect(res).toEqual(TASK_DELETED);
+    await taskService.delete(addedTask.id);
   });
 });

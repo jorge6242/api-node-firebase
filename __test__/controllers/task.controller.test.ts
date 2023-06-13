@@ -5,6 +5,8 @@ import APIResponse from "../../app/utils/response";
 import { ITaskBodySchema } from "../../app/schemas/tasks.schema";
 import { Request } from "express";
 
+const TASK = { title: "Task 1", description: "Description 1", status: "completed" };
+
 const TaskServiceMock = <jest.Mock<TaskService>>TaskService;
 const taskServiceMock = new TaskServiceMock();
 
@@ -13,7 +15,7 @@ const apiResponseMock = new ApiResponseMock();
 
 let taskController: TasksController;
 
-const TASK = { title: "Task 1", description: "Description 1", status: "completed" };
+
 describe("Task Controller", () => {
   beforeEach(() => {
     taskController = new TasksController(taskServiceMock, apiResponseMock);
@@ -27,20 +29,22 @@ describe("Task Controller", () => {
     const mockRequest = {} as Request;
     const mockResponse: any = { json: jest.fn().mockReturnValue(RESPONSE) } as unknown as Response;
     const mockNextFunction = jest.fn();
+
     const res: any = await taskController.find(mockRequest, mockResponse, mockNextFunction);
     expect(res.message).toEqual(RESPONSE.message);
   });
 
   test("Should store task", async () => {
     const response = { code: 200, message: [TASK] };
-    jest.spyOn(taskServiceMock, "store").mockReturnValueOnce(Promise.resolve(TASK));
 
+    jest.spyOn(taskServiceMock, "store").mockReturnValueOnce(Promise.resolve(TASK));
     jest.spyOn(apiResponseMock, "success").mockReturnValue(response);
     const mockRequest = {
       body: TASK,
     } as ValidatedRequest<ITaskBodySchema>;
     const mockResponse: any = { json: jest.fn().mockReturnValue(response) } as unknown as Response;
     const mockNextFunction = jest.fn();
+
     const res: any = await taskController.store(mockRequest, mockResponse, mockNextFunction);
     expect(res.message).toEqual(response.message);
   });
